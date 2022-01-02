@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/my_container.dart';
 import 'package:quiz_app/row_collumn.dart';
+import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
-void main() => runApp(MyApp());
+void main() {
+  debugPaintSizeEnabled = false;
+  return runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -9,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quiz App',
       theme: ThemeData(primarySwatch: Colors.amber),
-      home: MyRowColmn(),
+      home: MyContainer(),
     );
   }
 }
