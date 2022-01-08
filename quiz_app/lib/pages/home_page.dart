@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/models/Question.dart';
-import 'package:quiz_app/widgets/answer.dart';
+// import 'package:quiz_app/widgets/answer.dart';
 import 'package:quiz_app/widgets/progress_bar.dart';
+import 'package:quiz_app/widgets/quiz.dart';
+import 'package:quiz_app/widgets/result.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -32,12 +34,20 @@ class _HomePageState extends State<HomePage> {
         _questionIndex += 1;
       });
 
+  final whiteTextStyle = TextStyle(
+    color: Colors.white,
+    fontSize: 24,
+  );
+
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Тестирование'),
-        ),
-        body: Container(
+        // appBar: AppBar(
+        //   title: Text('Тестирование'),
+        // ),
+        body: SafeArea(
+      child: DefaultTextStyle.merge(
+        style: whiteTextStyle,
+        child: Container(
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(
               color: const Color(0xff2a375a),
@@ -45,30 +55,27 @@ class _HomePageState extends State<HomePage> {
                 image: AssetImage('assets/img/pngegg.png'),
                 fit: BoxFit.contain,
               )),
-          child: Column(children: <Widget>[
+          child: Column(
+            children: <Widget>[
             ProgressBar(
               icons: _icons,
               count: _questionIndex,
               total: data.questions.length,
             ),
-
-
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                data.questions[_questionIndex].title,
-                style: Theme.of(context).textTheme.caption,
-              ),
-            ),
-            ...data.questions[_questionIndex].answers
-                .map((value) => Answer(
-                      title: value['answer'],
-                      onChangeAnswer: _onChangeAnswer,
-                      isCorrect: value.containsKey('isCorrect') ? true : false,
-                    ))
-                .toList(),
-            
+            _questionIndex < data.questions.length
+                ? Quiz(
+                    index: _questionIndex,
+                    questionData: data,
+                    onChangeAnswer: _onChangeAnswer,
+                  )
+                : Result(
+                    count: _countResult,
+                    total: data.questions.length,
+                    onClearState: _clearState,
+                  )
           ]),
-        ));
+        ),
+      ),
+    ));
   }
 }
